@@ -1,0 +1,79 @@
+%! TEX root = **/010-main.tex
+% vim: spell spelllang=ca :
+
+% DESCRIPTORS
+% RegionProps -> Circularity
+% 
+
+
+%- Justificació del descriptors utilitzats i procediment d'obtenció.
+%- Descripció de les rutines utilitzades, tant les implementades pels estudiants com les contribuïdes per altres
+%- Classificador que s'utilitzarà. Motius.
+%- Resultats preliminars (si n'hi ha algun)
+
+\section{Descriptors Utilitzats}%
+\label{sec:desc}
+
+Per poder identificar les formes dels signes utilitzarem els següents descriptors per els diferents
+colors rellevants de la imatge (blanc, negre, vermell, blau i groc). A partir d'aquests descriptors
+el nostre classificador hauria de ser capaç d'identificar els signes.
+
+\subsection{Circularity}
+
+Aquest descriptor ens dona una mesura de la similitud de la figura a un cercle. Es calcula a partir
+de la relació entre àrea i perímetre:
+
+\[
+\frac{4\pi \cdot \text{Area}}{\text{Perimeter}^2}
+\]
+
+\subsection{Euler Number}
+
+Aquest descriptor ens diu el nombre de forats que conte la forma. Hauria de permetre identificar entre
+altres el nombre de dígits d'una senyal.
+
+\subsection{Extent}
+
+L'Extent indica el percentatge de píxels que formen part de la forma dins del rectangle que l'encapsula.
+
+\subsection{Shape Signature}
+
+Calculant la distancia entre el centroide i els píxels del perímetre de la figura obtenim la
+\emph{shape signature} de la qual podem obtenir dos indicadors:
+
+\paragraph{Nombre de pics} Contant els nombre de màxims locals de la signatura obtenim el nombre de pics.
+
+\paragraph{Diferencia entre màxim i mínim} La diferencia entre la distancia major i menor també serveix com a indicador de la forma.
+
+\section{Rutines utilitzades}
+
+\subsection{Preprocessat}
+
+Per poder processar les imatges i obtenir els indicadors, primerament utilitzarem 
+diverses rutines de MATLAB per tal de millorar el color i contrast de les imatges per tenir
+imatges mes homogènies i poder separar els colors mes fàcilment.
+
+Hem utilitzat la funció \texttt{imhazereduce} per corregir el color i contrast de les imatges.
+A l'\cref{app:pre} hi ha el codi del preprocessat en detall.
+
+
+
+%\subsection{Obtencio dels descriptors}%
+%\label{sub:obtencio_desc}
+
+\section{Classificador}%
+\label{sec:classificador}
+
+En quant al classificador, encara no estem del tot segurs. Hem llegit que és més
+important tenir bons descriptors que el classificador en sí, i per tant fins
+ara ens hem centrat més en els descriptors i no hem fet proves amb els 
+classificadors. 
+
+Tot i això, tenim dubtes entre SVM i arbres de decisió. Mentre que SVM sabem que és més precís i l'overfitting el gestiona millor, els arbres de decisió no
+requereixen de paràmetres, que per tant no cal afinar, i a més és més ràpid.
+Properament, començarem a fer proves i veurem quin dels dos classificadors
+funciona millor amb el nostre volum de imatges i descriptors, tenint en compte
+la qualitat dels resultats i també el temps d'execució.
+
+\section{Resultats}%
+\label{sec:resultats}
