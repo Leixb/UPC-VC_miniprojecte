@@ -3,7 +3,7 @@
 
 % DESCRIPTORS
 % RegionProps -> Circularity
-% 
+%
 
 
 %- Justificació del descriptors utilitzats i procediment d'obtenció.
@@ -44,36 +44,3 @@ Calculant la distancia entre el centroide i els píxels del perímetre de la fig
 \paragraph{Nombre de pics} Contant els nombre de màxims locals de la signatura obtenim el nombre de pics.
 
 \paragraph{Diferencia entre màxim i mínim} La diferencia entre la distancia major i menor també serveix com a indicador de la forma.
-
-\section{Rutines utilitzades}
-
-\subsection{Preprocessat}
-
-Per poder processar les imatges i obtenir els indicadors, primerament utilitzarem 
-diverses rutines de MATLAB per tal de millorar el color i contrast de les imatges per tenir
-imatges mes homogènies i poder separar els colors mes fàcilment.
-
-Hem utilitzat la funció \texttt{imhazereduce} per corregir el color i contrast de les imatges.
-A l'\cref{app:pre} hi ha el codi del preprocessat en detall.
-
-
-
-%\subsection{Obtencio dels descriptors}%
-%\label{sub:obtencio_desc}
-
-\section{Classificador}%
-\label{sec:classificador}
-
-En quant al classificador, encara no estem del tot segurs. Hem llegit que és més
-important tenir bons descriptors que el classificador en sí, i per tant fins
-ara ens hem centrat més en els descriptors i no hem fet proves amb els 
-classificadors. 
-
-Tot i això, tenim dubtes entre SVM i arbres de decisió. Mentre que SVM sabem que és més precís i l'overfitting el gestiona millor, els arbres de decisió no
-requereixen de paràmetres, que per tant no cal afinar, i a més és més ràpid.
-Properament, començarem a fer proves i veurem quin dels dos classificadors
-funciona millor amb el nostre volum de imatges i descriptors, tenint en compte
-la qualitat dels resultats i també el temps d'execució.
-
-\section{Resultats}%
-\label{sec:resultats}
