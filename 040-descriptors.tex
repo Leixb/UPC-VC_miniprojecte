@@ -19,6 +19,20 @@ senyal i per separar els diversos colors que ens interessen.
 
 \subsection{Colors}
 
+Segmentem la imatge en cinc colors: blanc, negre, vermell, blau i groc. 
+Primer de tot convertim la imatge a espai de color HSV per poder treballar amb més
+facilitat. Després, trobem la saturació mitjana i ens quedem amb els píxels que
+estan per sota, i calculem el valor mitjà d'aquells píxels. 
+
+Les regions blanques
+amb les que ens quedarem són aquelles amb un valor superior o igual a la mitja i una
+saturació inferior a la mitja. Per les regions negres ens fixem en que el valor
+sigui inferior a la mitja. 
+
+Per la resta de colors, mesurem la distància del color de
+cada píxel als colors i el color que estigui més a prop se'l queda com a part de les
+seves regions.
+
 \subsection{Fons}%
 \label{sub:seg_fons}
 
@@ -64,39 +78,64 @@ superior esquerra normalitzades per l'amplada de la imatge.
 \subsubsection{H}
 
 Fem servir H com a indicador de la qualitat de la línia. H representa el nombre de
-punts trobats per Hough pels que passa la línia i també normalitzat per l'amplada 
+punts trobats per Hough que pertanyen a la línia i també normalitzat per l'amplada 
 de la imatge.
 
 % tot dividit per w
 
 \subsection{Descriptors Cercles}
 
-Per cercles, busquem
+Pels cercles busquem la seva presencia amb la funció \texttt{imfindcircles}.
+Aquesta funció fa servir una Transformada de Hough Circular per trobar cercles
+i ens retorna tant el centre com el radi. Fem servir la opció \emph{Sensitivity}
+per augmentar-la fins a $0.9$, d'aquesta l'algoritme és menys fràgil davant
+parts ocluses o més fosques. Si bé és cert que augmentar la \emph{Sensitivity}
+pot comportar un augment de falsos positius, hem trobat que no era el cas per
+les imatges que hem fet servir. A més, busquem tant cercles clars com foscos.
 
 \subsubsection{radi}
+
+El radi del cercle trobat ajustat a l'amplada de la imatge.
+
 \subsubsection{Distancia al centre de la imatge}
+
+La distància euclidiana des del centroide del cercle al centre de la imatge,
+normalitzada per l'amplada de la imatge.
 
 \subsection{Descriptors Mascara}
 
-Calculant la distancia entre el centroide i els píxels del perímetre de la figura obtenim la
+Calculant la distancia entre el centroide i els píxels del perímetre de la màscara
+obtenim la
 \emph{shape signature} de la qual podem obtenir dos indicadors:
 
-\subsubsection{Nombre de pics} Contant els nombre de màxims locals de la signatura obtenim el nombre de pics.
+\subsubsection{Nombre de pics}
+Contant els nombre de màxims locals de la signatura obtenim el nombre de pics.
 
-\subsubsection{Diferencia entre màxim i mínim} La diferencia entre la distancia major i menor també serveix com a indicador de la forma.
+\subsubsection{Diferencia entre màxim i mínim}
+La diferencia entre la distancia major i menor també serveix com a indicador de la forma.
 
 \subsection{Descriptors Colors}%
 \label{sub:desc_col}
 
 Per poder identificar les formes dels signes utilitzarem els següents descriptors per els diferents
-colors rellevants de la imatge (blanc, negre, vermell, blau i groc). A partir d'aquests descriptors
-el nostre classificador hauria de ser capaç d'identificar els signes.
+colors rellevants de la imatge (blanc, negre, vermell, blau i groc). Pels colors blanc i
+negre agafem les 4 regions més grans i per la resta selecciones només la regió més 
+gran. A partir d'aquests descriptors
+de cada regió el nostre classificador hauria de ser capaç d'identificar els signes.
 
 \subsubsection{CentroidDistance}
 
+La distància euclidiana del centroide de la regió al centre de la imatge ajustada
+per l'amplada de la imatge.
+
 \subsubsection{Solidity}
 
+La \emph{Solidity} representa la densitat de la regió i es calcula dividint l'àrea
+de la regió per l'àrea del \emph{convex hull}.
+
 \subsubsection{Eccentricity}
+
+El rati entre el l'eix major i l'eix menor de l'e\lgem ipse que s'ajusta a la regió.
 
 \subsubsection{EulerNumber}
 
@@ -109,6 +148,8 @@ L'Extent indica el percentatge de píxels que formen part de la forma dins del r
 
 \subsubsection{Coverage}
 
+El rati de l'àrea de la regió respecte l'àrea de la senyal sencera.
+
 \subsection{HOG}%
 \label{sub:HOG}
 
@@ -116,9 +157,12 @@ Per diferenciar entre les diverses formes i dibuixos de les senyals, no hi havia
 propietats geomètriques explicats a \cref{sub:desc_col}. Com que en general les imatges estaven orientades verticalment
 i amb poca distorci\'o de perspectiva, vam decidir utilitzar un histograma de gradients orientats (HOG).
 
+
 Per tenir sempre el mateix nombre de valors, vam redimensionar les imatges a un valor fix de 50x50 píxels amb
 una mida de cela de 8x8, extraient  900 valors per imatge. Vam fer dos HOG, un sobre el blanc i un altre sobre el negre,
 d'aquesta manera podíem 
+
+%TODO
 
 L'histograma el vam aplicar sobre el color negre i sobre el color
 blanc, ja que son els dos colors que ens interessen per distingir les figures dins de les senyals.
