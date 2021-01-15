@@ -2,3 +2,32 @@
 % vim: spell spelllang=ca :
 
 \section{Funcions}
+
+\subsection{Implementades per nosaltres}
+
+\paragraph{\texttt{descriptorCircle}} extreu els descriptors del cercle que troba
+a la imatge.
+
+\paragraph{\texttt{descriptorColors}} extreu els descriptors de les regions dels
+colors que considerem: vermell, blau, blanc i negre.
+
+\paragraph{\texttt{descriptorTriangle}} extreu els descriptors de les línies que troba
+a la imatge.
+
+\paragraph{\texttt{hou}} retorna .
+
+\paragraph{\texttt{maskFinder}} retorna una màscara del senyal.
+
+\paragraph{\texttt{processFolder}} rep un patró de les imatges per les que treure 
+descriptors i itera sobre elles per extreure'ls. Retorna una taula amb els descriptors
+de les imatges.
+
+\paragraph{\texttt{processImages}} extreu els descriptors de totes les imatges de
+entrenament i testeig i els guarda en CSVs.
+
+\subsection{Externes}
+
+\paragraph{\texttt{imfindcircles}} troba cercles utilitzant Hough.
+
+\paragraph{\texttt{regionprops}} retorna descriptors de les regions de la
+imatge binària que rep.
