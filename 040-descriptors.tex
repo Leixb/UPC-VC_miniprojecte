@@ -11,36 +11,117 @@
 %- Classificador que s'utilitzarà. Motius.
 %- Resultats preliminars (si n'hi ha algun)
 
+\section{Segmentació}%
+\label{sec:segmentacio}
+
+Abans d'extreure els descriptors primer hem de fer segmentació per separar el fons de la
+senyal i per separar els diversos colors que ens interessen.
+
+\subsection{Colors}
+
+\subsection{Fons}%
+\label{sub:seg_fons}
+
+\subsubsection{Cercles}
+
+% Hough (imfindcircles)
+
+\subsubsection{Triangles i altres}
+
+% TODO
+% imreconstruct
+% bwconvexhull
+% validacio de mascara
+
+
 \section{Descriptors Utilitzats}%
 \label{sec:desc}
+
+En aquesta secció presentarem els descriptors que hem utilitzat finalment per
+representar les imatges. Separem els descriptors en dos parts clares, els que descriuen
+la forma del senya (cercle, triangle i màscara) i els que descriuen el contingut del
+senyal, per colors.
+A més, cal esmentar que hem provat un
+munt d'altres descriptors però no han funcionat tant bé, com ara la \emph{Circularity}.
+
+% explicar que vam fer diverses proves
+
+\subsection{Descriptors Triangles}
+
+Apliquem la transformada de Hough per buscar línies en angles de 90, 30 i 120 graus respecte la vertical. Sempre trobarem una línia per cada angle i serà aquella que passi 
+per més punts dels trobats per Hough. 
+Per cada línia extraiem 4 descriptors (en total 12):
+
+\subsubsection{Longitud}
+
+És a dir la longitud de la línia trobada normalitzada per l'amplada de la imatge.
+
+\subsubsection{Distancia a la cantonada (vertical i horitzontal)}
+
+La distàncies vertical i horitzontal del punt mig de la línia a la cantonada 
+superior esquerra normalitzades per l'amplada de la imatge.
+
+\subsubsection{H}
+
+Fem servir H com a indicador de la qualitat de la línia. H representa el nombre de
+punts trobats per Hough pels que passa la línia i també normalitzat per l'amplada 
+de la imatge.
+
+% tot dividit per w
+
+\subsection{Descriptors Cercles}
+
+Per cercles, busquem
+
+\subsubsection{radi}
+\subsubsection{Distancia al centre de la imatge}
+
+\subsection{Descriptors Mascara}
+
+Calculant la distancia entre el centroide i els píxels del perímetre de la figura obtenim la
+\emph{shape signature} de la qual podem obtenir dos indicadors:
+
+\subsubsection{Nombre de pics} Contant els nombre de màxims locals de la signatura obtenim el nombre de pics.
+
+\subsubsection{Diferencia entre màxim i mínim} La diferencia entre la distancia major i menor també serveix com a indicador de la forma.
+
+\subsection{Descriptors Colors}%
+\label{sub:desc_col}
 
 Per poder identificar les formes dels signes utilitzarem els següents descriptors per els diferents
 colors rellevants de la imatge (blanc, negre, vermell, blau i groc). A partir d'aquests descriptors
 el nostre classificador hauria de ser capaç d'identificar els signes.
 
-\subsection{Circularity}
+\subsubsection{CentroidDistance}
 
-Aquest descriptor ens dona una mesura de la similitud de la figura a un cercle. Es calcula a partir
-de la relació entre àrea i perímetre:
+\subsubsection{Solidity}
 
-\[
-\frac{4\pi \cdot \text{Area}}{\text{Perimeter}^2}
-\]
+\subsubsection{Eccentricity}
 
-\subsection{Euler Number}
+\subsubsection{EulerNumber}
 
 Aquest descriptor ens diu el nombre de forats que conte la forma. Hauria de permetre identificar entre
 altres el nombre de dígits d'una senyal.
 
-\subsection{Extent}
+\subsubsection{Extent}
 
 L'Extent indica el percentatge de píxels que formen part de la forma dins del rectangle que l'encapsula.
 
-\subsection{Shape Signature}
+\subsubsection{Coverage}
 
-Calculant la distancia entre el centroide i els píxels del perímetre de la figura obtenim la
-\emph{shape signature} de la qual podem obtenir dos indicadors:
+\subsection{HOG}%
+\label{sub:HOG}
 
-\paragraph{Nombre de pics} Contant els nombre de màxims locals de la signatura obtenim el nombre de pics.
+Per diferenciar entre les diverses formes i dibuixos de les senyals, no hi havia prou amb els descriptors basats en
+propietats geomètriques explicats a \cref{sub:desc_col}. Com que en general les imatges estaven orientades verticalment
+i amb poca distorci\'o de perspectiva, vam decidir utilitzar un histograma de gradients orientats (HOG).
 
-\paragraph{Diferencia entre màxim i mínim} La diferencia entre la distancia major i menor també serveix com a indicador de la forma.
+Per tenir sempre el mateix nombre de valors, vam redimensionar les imatges a un valor fix de 50x50 píxels amb
+una mida de cela de 8x8, extraient  900 valors per imatge. Vam fer dos HOG, un sobre el blanc i un altre sobre el negre,
+d'aquesta manera podíem 
+
+L'histograma el vam aplicar sobre el color negre i sobre el color
+blanc, ja que son els dos colors que ens interessen per distingir les figures dins de les senyals.
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%5
+
