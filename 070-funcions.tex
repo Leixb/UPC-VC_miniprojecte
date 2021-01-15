@@ -14,7 +14,7 @@ colors que considerem: vermell, blau, blanc i negre.
 \paragraph{\texttt{descriptorTriangle}} extreu els descriptors de les línies que troba
 a la imatge.
 
-\paragraph{\texttt{hou}} retorna .
+\paragraph{\texttt{houghpoints}} retorna els extrems de la línia troabada per Hough.
 
 \paragraph{\texttt{maskFinder}} retorna una màscara del senyal.
 
@@ -31,3 +31,10 @@ entrenament i testeig i els guarda en CSVs.
 
 \paragraph{\texttt{regionprops}} retorna descriptors de les regions de la
 imatge binària que rep.
+
+\paragraph{\texttt{hough}} retorna la transformada de Hough.
+
+\paragraph{\texttt{houghpeaks}} troba pics a la tranformada de Hough.
+
+\paragraph{\texttt{houghlines}} extreu línies en base a la transformada de Hough i els
+pics trobats per \texttt{houghpeaks}.
