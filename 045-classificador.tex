@@ -5,4 +5,21 @@
 \label{sec:classificador}
 
 Vam provar diversos classificadors amb diferents configuracions i descriptors per trobar el que funcionava millor per
-les nostres dades. Al principi fèiem
+les nostres dades. Vam provar:
+
+\begin{itemize}
+    \item KNN
+    \item SVM
+    \item Arbres
+    \item Linear Discriminant
+\end{itemize}
+
+El primer experiment que vam fer, KNN i en concret amb weighted KNN
+(calculant distancies entre punt per fer els clústers). Els arbres donaven molt
+mals resultats ja que tendien a fer molt overfitting del entrenament. Linear
+discriminant era comparable a SVM però donava sempre pitjors resultats (tot i
+que entrenava molt mes ràpid).
+
+Finalment vam quedar-nos amb SVM i en concret el SVM quadràtic ja que desprès
+d'afegir millors descriptors tal com s'explica a \cref{sec:experiments} era el
+que donava millors resultats.

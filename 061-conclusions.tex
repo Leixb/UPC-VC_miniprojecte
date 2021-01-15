@@ -1,0 +1,33 @@
+%! TEX root = **/010-main.tex
+% vim: spell spelllang=ca :
+
+\section{Conclusions}
+
+No hem aconseguit una accuracy gaire elevada en el classificador general. Això es deu a diversos motius:
+
+\begin{enumerate}
+    \item El mostreig que fem per grups de series de imatges no considera les diferencies en el
+        nombre de imatges de cada sèrie. Això fa que tant al entrenar com al fer els tests les series
+        amb mes imatges prevalguin sobre la resta, afectant als resultats.
+    \item Els descriptors de HOG no son suficients per distingir entre els símbols de les senyals de
+        velocitat ja que a la resolució que fèiem les imatges els gradients orientats eren molt similars
+        degut a la forma dels dígits. Mirant la matriu de confusió veiem que 30 i 70 es distingeixen bé i
+        la confusió es genera sobre tot entre 50, 60 i 80.
+    \item Analitzant les matrius de confusió veiem que gran part dels nostres errors es troben confonent
+        9 i 10 (s'explica al següent punt), 6 i 38 i la imatge 32 amb les de direcció. 32 i 6 formen part de les
+        senyals de cercles blancs amb vores negres, aquestes teníem molts problemes al fer la segmentació ja que
+        no podíem ajudar-nos dels canals de color i depeníem només de la segmentació blanca. Es possible que eliminant
+        aquesta categoria i agrupant-la amb la de senyals blancs amb vores vermelles tinguéssim millors resultats.
+    \item Per un error en el nostre codi, la distinció entre les senyals 9, 10 no es va arribar a implementar
+        i totes es classifiquen com a 9.
+    \item Algunes imatges tenien una resolució molt baixa i estaven mogudes fent molt difícil la segmentació i
+        extracció de descriptors.
+    \item Els nostres descriptors per identificar formes eren sensibles a distorsió de perspectiva (HOG) i no
+        fèiem res per mitigar-ho.
+\end{enumerate}
+
+Com a punt positiu, la senyal de cedir el pas (triangle invertit) es classifica molt bé al igual que els triangles
+en el classificador general, fet que ens indica que tant els descriptors basats en la transformada de Hough per
+identificar triangles com la segmentació de fons per senyals blanques han funcionat. Amb mes temps es podria haver
+refinat com extrèiem els descriptors de HOG: redimensionar les imatges en funció del contingut i no de la imatge original
+o intentar corregir la deformació de perspectiva.

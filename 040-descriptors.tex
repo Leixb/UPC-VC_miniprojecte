@@ -19,15 +19,15 @@ senyal i per separar els diversos colors que ens interessen.
 
 \subsection{Colors}
 
-Segmentem la imatge en cinc colors: blanc, negre, vermell, blau i groc. 
+Segmentem la imatge en cinc colors: blanc, negre, vermell, blau i groc.
 Primer de tot convertim la imatge a espai de color HSV per poder treballar amb més
 facilitat. Després, trobem la saturació mitjana i ens quedem amb els píxels que
-estan per sota, i calculem el valor mitjà d'aquells píxels. 
+estan per sota, i calculem el valor mitjà d'aquells píxels.
 
 Les regions blanques
 amb les que ens quedarem són aquelles amb un valor superior o igual a la mitja i una
 saturació inferior a la mitja. Per les regions negres ens fixem en que el valor
-sigui inferior a la mitja. 
+sigui inferior a la mitja.
 
 Per la resta de colors, mesurem la distància del color de
 cada píxel als colors i el color que estigui més a prop se'l queda com a part de les
@@ -36,16 +36,37 @@ seves regions.
 \subsection{Fons}%
 \label{sub:seg_fons}
 
-\subsubsection{Cercles}
+Per segmentar el fons vam aplicar una combinació de diverses tècniques.
+Primerament intentàvem buscar un cercle de radi entre la meitat de la imatge i
+una 4a part. Provàvem pels diferents segments (color blanc, blau i vermell en
+aquest ordre) i si trobàvem un cercle l'utilitzàvem com a mascara.
 
-% Hough (imfindcircles)
+Per trobar cercles utilitzàvem la funció de matlab \texttt{imclearcircles} que
+busca cercles a les imatges utilitzant un algorisme basat en CHT (Circle Hough
+Transform)
 
-\subsubsection{Triangles i altres}
+Si no trobàvem cap cercle, intentàvem fer una reconstrucció partint dels pixels
+del centre de la imatge: el de just al centre, un altre a 2/3 i l'altre a 1/3
+de la vertical i dos mes als costats també als terços de l'amplada. Un cop feta
+la reconstrucció a partir d'aquests 5 pixels i tanquem tots els forats fent un
+convex hull (\texttt{bwconvhull}) deixant una única component connexa. Després,
+mirem si la mascara es valida comprovant que el pixel central forma part de la
+mascara i que no hi ha cap part de la mascara tocant les vores. Si es compleixen
+les condicions utilitzem aquesta mascara. Això ho apliquem per al segment de
+colors blanc, vermell i blau i també per un segment creat a partir de la negació
+de la reconstrucció del vermell combinada amb la combinació del blanc. Aquest
+mètode trobava formes de STOP, el diamant i triangles així com la direcció
+prohibida o altres cercles que no havíem detectat degut a la deformació de
+perspectiva.
 
-% TODO
-% imreconstruct
-% bwconvexhull
-% validacio de mascara
+Si seguim sense trobar cap mascara provem a tancar forats a la mascara vermella
+i mirar si compleix les condicions, sinó fem \texttt{imclearborder}
+(reconstrucció per eliminar vores) i si cap dona una mascara valida retornem com
+a mascara tot 1 (no segmentem).
+
+Vam fer diverses proves per trobar quin era el millor ordre de colors a provar
+per cada mètode i també vam provar altres mètodes basats en la detecció de vores
+(canny i sobel).
 
 
 \section{Descriptors Utilitzats}%
@@ -62,8 +83,8 @@ munt d'altres descriptors però no han funcionat tant bé, com ara la \emph{Circ
 
 \subsection{Descriptors Triangles}
 
-Apliquem la transformada de Hough per buscar línies en angles de 90, 30 i 120 graus respecte la vertical. Sempre trobarem una línia per cada angle i serà aquella que passi 
-per més punts dels trobats per Hough. 
+Apliquem la transformada de Hough per buscar línies en angles de 90, 30 i 120 graus respecte la vertical. Sempre trobarem una línia per cada angle i serà aquella que passi
+per més punts dels trobats per Hough.
 Per cada línia extraiem 4 descriptors (en total 12):
 
 \subsubsection{Longitud}
@@ -72,13 +93,13 @@ Per cada línia extraiem 4 descriptors (en total 12):
 
 \subsubsection{Distancia a la cantonada (vertical i horitzontal)}
 
-La distàncies vertical i horitzontal del punt mig de la línia a la cantonada 
+La distàncies vertical i horitzontal del punt mig de la línia a la cantonada
 superior esquerra normalitzades per l'amplada de la imatge.
 
 \subsubsection{H}
 
 Fem servir H com a indicador de la qualitat de la línia. H representa el nombre de
-punts trobats per Hough que pertanyen a la línia i també normalitzat per l'amplada 
+punts trobats per Hough que pertanyen a la línia i també normalitzat per l'amplada
 de la imatge.
 
 % tot dividit per w
@@ -119,7 +140,7 @@ La diferencia entre la distancia major i menor també serveix com a indicador de
 
 Per poder identificar les formes dels signes utilitzarem els següents descriptors per els diferents
 colors rellevants de la imatge (blanc, negre, vermell, blau i groc). Pels colors blanc i
-negre agafem les 4 regions més grans i per la resta selecciones només la regió més 
+negre agafem les 4 regions més grans i per la resta selecciones només la regió més
 gran. A partir d'aquests descriptors
 de cada regió el nostre classificador hauria de ser capaç d'identificar els signes.
 
@@ -157,15 +178,9 @@ Per diferenciar entre les diverses formes i dibuixos de les senyals, no hi havia
 propietats geomètriques explicats a \cref{sub:desc_col}. Com que en general les imatges estaven orientades verticalment
 i amb poca distorci\'o de perspectiva, vam decidir utilitzar un histograma de gradients orientats (HOG).
 
-
 Per tenir sempre el mateix nombre de valors, vam redimensionar les imatges a un valor fix de 50x50 píxels amb
 una mida de cela de 8x8, extraient  900 valors per imatge. Vam fer dos HOG, un sobre el blanc i un altre sobre el negre,
-d'aquesta manera podíem 
-
-%TODO
-
-L'histograma el vam aplicar sobre el color negre i sobre el color
-blanc, ja que son els dos colors que ens interessen per distingir les figures dins de les senyals.
+d'aquesta manera podíem identificar les formes tant als senyals de velocitat i
+triangles (negre) com a les blaves de direcció (blanc).
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%5
-

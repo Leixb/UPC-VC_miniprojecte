@@ -35,13 +35,51 @@ i dibuixos de dintre les senyals. Per a distingir-los, vam afegir un nou descrip
 (explicat en detall a la \cref{sub:HOG}).
 
 El problema amb aquest nou descriptor es que s'ha de computar per blanc i per negre i te 900 variables. Pel que passàvem
-a tenir casi 2000 descriptors per imatge que trigaven bastant en extreure'ls de totes les imatges i a entrenar. Per
-continuar fent els experiments vam dividir el classificador en dues etapes: identificació de la senyal en termes generals
+a tenir casi 2000 descriptors per imatge que trigaven bastant en extreure'ls de totes les imatges i a entrenar.
+Per assolir temps d'entrenament assequibles necessitàvem un mostreig del 10\%
+El problema es que amb 10\% agafem només unes 3000 imatges tenint 2000
+descriptors fent que els resultats fossin molt poc precisos. El mateix passava
+al reduir la mida dels descriptors de HOG o fent una selecció dels descriptors
+mes rellevants.
+
+Per continuar fent els experiments vam dividir el classificador en dues etapes: identificació de la senyal en termes generals
 i identificació de la senyal concreta en funció del dibuix utilitzant HOG. D'aquesta manera podíem millorar els descriptors
 de HOG sense haver de tornar a entrenar el primer classificador i viceversa. El problema d'aquest sistema es que l'error
-del primer classificador s'acumula al següent, per tant, si el primer no es molt fiable es perjudicial.
+del primer classificador s'acumula al següent, per tant, si el primer no es molt
+fiable es perjudicial.
 
 A mesura que afegíem descriptors, el KNN que abans donava millors resultats que SVM començava a veure afectat per
 descriptors irrellevants i donava pitjors resultats. D'entre els diferents SVM, el millor resultat l'obteníem amb
 el SVM quadràtic i one-vs-all, però tenint casi 2000 features no podíem fer one-vs-all ja que trigava massa.
-Finalment van acabar amb SVM quadràtic i one-vs-one.
+
+Utilitzàvem un primer classificador que distingia entre les categories
+principals:
+
+\begin{table}[H]
+    \centering
+    \caption{Taula de categories principals}%
+    \label{tab:cat_prin}
+    \begin{tabular}{lc}
+        \toprule
+        Categoria & Senyals que conté \\
+        \midrule
+        Cercles blanc i vermells amb dibuix a dintre & [0:5, 7,8, 16] \\
+        Cercles blancs amb dibuix & [6, 32, 41, 42] \\
+        Cercles prohibició d'avançar & [9, 10] \\
+        Calcada amb prioritat & [12] \\
+        Ceda & [13] \\
+        Stop & [14] \\
+        Circulació prohibida & [14] \\
+        Direcció prohibida & [17] \\
+        Triangles & [11, 18:31] \\
+        Cercles blaus & [33:40] \\
+        \bottomrule
+    \end{tabular}
+\end{table}
+
+Tenim 5 categories úniques i cinc que s'han de refinar utilitzant els altres
+classificadors. Vam entrenar un classificador per cada una de les 5 categories
+que no distingíem directament al primer classificador utilitzant descriptors de
+HOG. En tots els classificadors utilitzem SVM quadràtic (one-vs-one) perquè es
+el que donava millors resultats.
+
