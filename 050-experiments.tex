@@ -5,22 +5,22 @@
 \label{sec:experiments}
 
 Tal com s'ha explicat a les seccions anteriors, van dur a terme diversos experiments per escollir quins descriptors
-i classificadors utilitzar. Per dur a terme els experiments, vam dividir les imatges en dos conjunts en un ratio 1:4.
+i classificadors utilitzar. Per dur a terme els experiments, vam dividir les imatges en dos conjunts en proporció 1:4.
 Com que teníem series de imatges i no imatges individuals, per tal de no entrenar i desprès fer els test amb imatges
-de la mateixa serie, la divisió la vam fer per series senceres.
+de la mateixa sèrie, la divisió la vam fer per series senceres.
 
-Aixi doncs, teníem un 20\% de els series d'imatges com a imatges de test i l'altre 80\% per a entrenar. El problema d'aquest
+Així doncs, teníem un 20\% de els series d'imatges com a imatges de test i l'altre 80\% per a entrenar. El problema d'aquest
 mètode es que no es considera el nombre d'imatges de les series i per tant pot haver series amb moltes imatges que
 afectin al classificador tant al entrenar com al avaluar-lo.
 
 Al entrenar els classificadors vam fer 5 \emph{folds} de \emph{cross-validation} per evitar overfitting del model. Per
 avaluar els models ens vam centrar en l'accuracy d'aquests sobre el conjunt de \emph{test}.
 
-La primera versió del classificador vam utilitzar descriptors nomes basats en les propietats de les àrees mes grans
+La primera versió del classificador vam utilitzar descriptors només basats en les propietats de les àrees mes grans
 de cada color. Amb \emph{weighted KNN} obteníem una precisió de 46.3\% i SVM del 32.8\%. Analitzant les segmentacions
 de color d'algunes de les imatges que no classificàvem be, vam veure que el fons es confonia molt sovint amb els colors
 i les formes no es reconeixien. A mes a mes, fèiem \texttt{imclearborder} per eliminar els elements que tocaven les vores
-però aixo feia que molt sovint no quedes res. Aixo ens va portar a fer una segmentació del fons mes complexa en la
+però això feia que molt sovint no quedes res. Per solucionar-ho, vam fer una segmentació del fons mes complexa en la
 que busquem cercles i línies (la descripció en detall esta explicada a la \cref{sub:seg_fons}.
 
 També vam afegir altres descriptors basats en Hough que buscaven rectes i cercles per poder distingir millor entre
@@ -28,10 +28,10 @@ triangles, cercles i altres formes.
 
 Provant el classificador en grups mes generals de senyals (agrupant cercles vermells, triangles, cercles blaus \dots)
 obteníem accuracy del 90\% amb SVM lineal. Tot i no ser un molt bon resultat considerant que les classes eren molt
-genèriques, ens indica que els descriptors que teníem eren suficients per distingir les formes de les senyals i colors en la majoria de casos. 
+genèriques, ens indica que els descriptors que teníem eren suficients per distingir les formes de les senyals i colors en la majoria de casos.
 
 Amb la nova segmentació els resultats van millorar lleugerament, però seguíem sense poder distingir entre els nombres
-i dibuixos de dintre les senyals. Per a distingir-los, vam afegir un nou descriptor aplicant HOG 
+i dibuixos de dintre les senyals. Per a distingir-los, vam afegir un nou descriptor aplicant HOG
 (explicat en detall a la \cref{sub:HOG}).
 
 El problema amb aquest nou descriptor es que s'ha de computar per blanc i per negre i te 900 variables. Pel que passàvem
@@ -42,6 +42,6 @@ de HOG sense haver de tornar a entrenar el primer classificador i viceversa. El 
 del primer classificador s'acumula al següent, per tant, si el primer no es molt fiable es perjudicial.
 
 A mesura que afegíem descriptors, el KNN que abans donava millors resultats que SVM començava a veure afectat per
-descriptors irrellevants i donava pitjors resultats. D'entre els diferents SVM, el millor resultat l'obteniem amb
-el SVM quadràtic i one-vs-all, però tenint casi 2000 features no podiem fer one-vs-all ja que trigava massa.
+descriptors irrellevants i donava pitjors resultats. D'entre els diferents SVM, el millor resultat l'obteníem amb
+el SVM quadràtic i one-vs-all, però tenint casi 2000 features no podíem fer one-vs-all ja que trigava massa.
 Finalment van acabar amb SVM quadràtic i one-vs-one.
