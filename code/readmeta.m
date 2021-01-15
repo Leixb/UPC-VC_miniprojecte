@@ -1,5 +1,5 @@
-function I = readmeta(i)    
+% Helper function per llegir senyals pel numero
+function I = readmeta(i)
     filename = sprintf('../images/Meta/%d.png', i);
     I = imread(filename);
 end
-

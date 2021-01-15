@@ -3,19 +3,32 @@
 
 \section{Codis de MATLAB}
 
-\subsection{Preprocessat}%
-\label{app:pre}
+\newcommand{\inmat}[1]{
+    \subsection{#1}%
+    \inputminted{matlab}{./code/#1}
+    \pagebreak
+}
 
-\inputminted{matlab}{./code/preprocess.m}
+\inmat{main.m}
 
-\subsection{Shape Signature}%
-\label{app:pre}
-\inputminted{matlab}{./code/shapeSignature.m}
+\inmat{descriptors.m}
+\inmat{hogDesc.m}
 
-\pagebreak
-\subsection{Color}%
-\inputminted{matlab}{./code/splitColor.m}
+\inmat{GeneralFeatures.m}
+\inmat{HOGFeatures.m}
 
-\section{Results}
+\inmat{labelSignal.m}
+\inmat{labelHOGtest.m}
 
-\includepdf[pages={1-5}]{test.pdf}
+\inmat{preprocess.m}
+\inmat{splitColor.m}
+\inmat{maskFinder.m}
+
+\inmat{processGeneral.m}
+\inmat{processHOG.m}
+
+\inmat{readimg.m}
+\inmat{readmeta.m}
+
+\inmat{testModels.m}
+\inmat{testModelComplet.m}
